@@ -73,6 +73,7 @@ services:
     - "23117:27017"
     volumes:
     - /data/mongodb/server3:/data/db
+    extra_hosts:
     - "local-mongondb-rs-server1:${HOST_IP_ADDRESS}"
     - "local-mongondb-rs-server2:${HOST_IP_ADDRESS}"
     - "local-mongondb-rs-server3:${HOST_IP_ADDRESS}"
