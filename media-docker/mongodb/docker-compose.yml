@@ -1,0 +1,84 @@
+# http://blog.csdn.net/pddddd/article/details/46893593
+
+# sudo docker run --name rs_server1 -p 21117:27017 -d rainleon/mongodb:3.0.4 --noprealloc --smallfiles --replSet rs1
+# sudo docker run --name rs_server2 -p 22117:27017 -d rainleon/mongodb:3.0.4 --noprealloc --smallfiles --replSet rs1
+# sudo docker run --name rs_server3 -p 23117:27017 -d rainleon/mongodb:3.0.4 --noprealloc --smallfiles --replSet rs1
+# export HOST_IP_ADDRESS=10.106.156.109
+# docker exec -it
+#
+# mongo --port 27017
+# >myconf = {
+#    "_id" : "rs1",
+#    "members" : [
+#        {
+#            "_id" : 0,
+#            "host" : "local-mongondb-rs-server1:21117"
+#        },
+#        {
+#            "_id" : 1,
+#            "host" : "local-mongondb-rs-server2:22117"
+#        },
+#        {
+#            "_id" : 2,
+#            "host" : "local-mongondb-rs-server3:23117"
+#        }
+#    ]
+#}
+# >rs.initiate(myconf)
+
+
+version: '2.1'
+services:
+  mongodb1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rainleon/mongodb:3.0.4
+    command: [--noprealloc, --smallfiles, --replSet, rs1]
+    container_name: mongondb_rs_server1
+    hostname: local-mongondb-rs-server1
+    ports:
+    - "21117:27017"
+    volumes:
+    - /data/mongodb/server1:/data/db
+    extra_hosts:
+    - "local-mongondb-rs-server1:${HOST_IP_ADDRESS}"
+    - "local-mongondb-rs-server2:${HOST_IP_ADDRESS}"
+    - "local-mongondb-rs-server3:${HOST_IP_ADDRESS}"
+  mongodb2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rainleon/mongodb:3.0.4
+    command: [--noprealloc, --smallfiles, --replSet, rs1]
+    container_name: mongondb_rs_server2
+    hostname: local-mongondb-rs-server2
+    ports:
+    - "22117:27017"
+    volumes:
+    - /data/mongodb/server2:/data/db
+    extra_hosts:
+    - "local-mongondb-rs-server1:${HOST_IP_ADDRESS}"
+    - "local-mongondb-rs-server2:${HOST_IP_ADDRESS}"
+    - "local-mongondb-rs-server3:${HOST_IP_ADDRESS}"
+  mongodb3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rainleon/mongodb:3.0.4
+    command: [--noprealloc, --smallfiles, --replSet, rs1]
+    container_name: mongondb_rs_server3
+    hostname: local-mongondb-rs-server3
+    ports:
+    - "23117:27017"
+    volumes:
+    - /data/mongodb/server3:/data/db
+    extra_hosts:
+    - "local-mongondb-rs-server1:${HOST_IP_ADDRESS}"
+    - "local-mongondb-rs-server2:${HOST_IP_ADDRESS}"
+    - "local-mongondb-rs-server3:${HOST_IP_ADDRESS}"
+
+networks:
+  default:
+    external:
+      name: xss-media-network
