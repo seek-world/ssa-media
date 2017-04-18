@@ -4,7 +4,7 @@ set -e
 
 
 export GITHUB_SS_PARENT_PREFIX="https://github.com/seek-world/ss-parent/raw/master"
-export GITHUB_GIT_SERVICE_TOKEN="6648f1fe47320706cf6694dbc23b735212b27b71"
+#export GITHUB_GIT_SERVICE_TOKEN=""
 export BUILD_SITE_GITHUB_REPOSITORY_OWNER="rainleon"
 export BUILD_SITE_GITHUB_REPOSITORY_NAME="xss-media"
 export MAVEN_CENTRAL_USER=""
@@ -35,7 +35,7 @@ if [ ! -f "$(pwd)/src/main/maven/settings.xml" ]; then
     curl -H 'Cache-Control: no-cache' -t utf-8 -s -L -o ${MAVEN_SETTINGS_FILE} ${GITHUB_SS_PARENT_PREFIX}/src/main/maven/settings.xml
     export MAVEN_SETTINGS="${MAVEN_SETTINGS} -s ${MAVEN_SETTINGS_FILE}"
 else
-    export MAVEN_SETTINGS="${MAVEN_SETTINGS} -s $(pwd)/src/main/maven/settings-${INFRASTRUCTURE}.xml"
+    export MAVEN_SETTINGS="${MAVEN_SETTINGS} -s $(pwd)/src/main/maven/settings.xml"
 fi
 
 echo "MAVEN_OPTS: ${MAVEN_OPTS}"
