@@ -3,12 +3,10 @@
 set -e
 
 
-export GITHUB_SS_PARENT_PREFIX="https://github.com/seek-world/ss-parent/raw/master"
-#export GITHUB_GIT_SERVICE_TOKEN=""
+export GITHUB_SS_PARENT_PREFIX="https://github.com/seek-world/xss-parent/raw/master"
 export BUILD_SITE_GITHUB_REPOSITORY_OWNER="rainleon"
 export BUILD_SITE_GITHUB_REPOSITORY_NAME="xss-media"
-export MAVEN_CENTRAL_USER=""
-export MAVEN_CENTRAL_PASS=""
+
 
 export MAVEN_OPTS=""
 
@@ -21,7 +19,8 @@ export MAVEN_OPTS="${MAVEN_OPTS} -Ddocker.registry="
 export MAVEN_OPTS="${MAVEN_OPTS} -Ddocker-maven.useConfigFile=true"
 export MAVEN_OPTS="${MAVEN_OPTS} -Dmaven.test.skip=true"
 export MAVEN_OPTS="${MAVEN_OPTS} -Dmaven.integration-test.skip=true"
-export MAVEN_OPTS="${MAVEN_OPTS} -Djacoco=true"
+export MAVEN_OPTS="${MAVEN_OPTS} -Djacoco="
+export MAVEN_OPTS="${MAVEN_OPTS} -Dinfrastructure=github"
 
 export MAVEN_SETTINGS=""
 
@@ -39,13 +38,20 @@ else
 fi
 
 echo "MAVEN_OPTS: ${MAVEN_OPTS}"
+echo "MAVEN_SETTINGS: ${MAVEN_SETTINGS}"
 
 if [ "${1}" == "clean" ]; then
     mvn ${MAVEN_SETTINGS} clean
 elif [ "${1}" == "help" ]; then
     mvn ${MAVEN_SETTINGS} help:effective-pom
+elif [ "${1}" == "deploy" ];then
+    mvn ${MAVEN_SETTINGS} deploy
+elif [ "${1}" == "package" ];then
+    mvn ${MAVEN_SETTINGS} package
+elif [ "${1}" == "site" ];then
+    mvn ${MAVEN_SETTINGS} site
 else
-    mvn ${MAVEN_SETTINGS} clean install
+    echo "error!"
 fi
 
 
